@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Pengaturan Blog
+            Pengaturan Blog <a href="{{ route('member.blogs.create') }}" class="bg-blue-400 p-2 rounded-md text-white text-sm">Tambah Tulisan</a>
         </h2>
     </x-slot>
 
@@ -32,11 +32,15 @@
                                 <td class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">{{ $value->created_at->isoFormat('dddd, D MMMM Y') }}</td>
                                 <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">{{ $value->status }}</td>
                                 <td class="border px-6 py-4 text-center">
-                                    <a href='{{ route("member.blogs.edit",["blog"=>$value->id]) }}' class="text-blue-600 hover:text-blue-400 px-2">Edit</a>
+                                    <a href='{{ route("member.blogs.edit",["post"=>$value->id]) }}' class="text-blue-600 hover:text-blue-400 px-2">Edit</a>
                                     <a href='' class="text-blue-600 hover:text-blue-400 px-2">lihat</a>
-                                    <button type=' submit' class='text-red-600 hover:text-red-400 px-2'>
-                                        hapus
-                                    </button>
+                                    <form action="{{ route('member.blogs.destroy',['post'=>$value->id]) }}" class="inline" method="POST" onsubmit="return confirm('Yakin?')">
+                                        @csrf
+                                        @method('delete')
+                                        <button type='submit' class='text-red-600 hover:text-red-400 px-2'>
+                                            hapus
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

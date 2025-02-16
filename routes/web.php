@@ -17,12 +17,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // blog route
-    Route::get('member/blogs',[BlogController::class, 'index']);
-    Route::get('member/blogs/{post}/edit',[BlogController::class, 'edit']);
+    // Route::get('member/blogs',[BlogController::class, 'index']);
+    // Route::get('member/blogs/{post}/edit',[BlogController::class, 'edit']);
 
     Route::resource('member/blogs',BlogController::class)->names([
         'index'=>'member.blogs.index',
-        'edit'=>'member.blogs.edit'
+        'edit'=>'member.blogs.edit',
+        'update'=>'member.blogs.update',
+        'create'=>'member.blogs.create',
+        'store'=>'member.blogs.store',
+        'destroy'=>'member.blogs.destroy',
+    ])->parameters([
+        'blogs' => 'post'
     ]);
 });
 
