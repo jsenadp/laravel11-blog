@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\fileExists;
@@ -15,10 +16,15 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $data = Post::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(3);
+        $search = $request->search;
+        $data = Post::where('user_id', $user->id)->where(function($query) use ($search){
+            if($search){
+                $query->where('title','like',"%{$search}%")->orWhere('content','like',"%{$search}%");
+            }
+        })->orderBy('id', 'desc')->paginate(10)->withQueryString();
         return view('member.blogs.index', compact('data'));
     }
 
@@ -84,6 +90,7 @@ class BlogController extends Controller
      */
     public function edit(Post $post)
     {
+        Gate::authorize('edit',$post);
         $data = $post;
         return view('member.blogs.edit',compact('data'));
     }
@@ -136,6 +143,8 @@ class BlogController extends Controller
      */
     public function destroy(Post $post)
     {
+        Gate::authorize('delete',$post);
+
         if(isset($post->thumbnail) && file_exists(public_path(getenv('COSTUM__THUMBNAIL_LOCATION'))."/".$post->thumbnail)){
             unlink(public_path(getenv('COSTUM__THUMBNAIL_LOCATION'))."/".$post->thumbnail);
         }
