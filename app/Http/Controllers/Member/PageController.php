@@ -11,9 +11,9 @@ use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\fileExists;
 
-class BlogController extends Controller
+class PageController extends Controller
 {
-    protected $type = 'blog';
+    protected $type = 'page';
     /**
      * Display a listing of the resource.
      */
@@ -21,12 +21,12 @@ class BlogController extends Controller
     {
         $user = Auth::user();
         $search = $request->search;
-        $data = Post::where('user_id', $user->id)->where('type', $this->type)->where(function($query) use ($search){
+        $data = Post::where('type', $this->type)->where(function($query) use ($search){
             if($search){
                 $query->where('title','like',"%{$search}%")->orWhere('content','like',"%{$search}%");
             }
         })->orderBy('id', 'desc')->paginate(10)->withQueryString();
-        return view('member.blogs.index', compact('data'));
+        return view('member.pages.index', compact('data'));
     }
 
     /**
@@ -34,7 +34,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('member.blogs.create');
+        return view('member.pages.create');
     }
 
     /**
@@ -76,7 +76,7 @@ class BlogController extends Controller
         ];
 
         Post::create($data);
-        return redirect()->route('member.blogs.index')->with('success','Data berhasil ditambahkan');
+        return redirect()->route('member.pages.index')->with('success','Data berhasil ditambahkan');
     }
 
     /**
@@ -93,11 +93,10 @@ class BlogController extends Controller
     public function edit(Post $post)
     {
         if($post->type != $this->type){
-            return redirect()->route('member.blogs.index');
+            return redirect()->route('member.pages.index');
         }
-        Gate::authorize('edit',$post);
         $data = $post;
-        return view('member.blogs.edit',compact('data'));
+        return view('member.pages.edit',compact('data'));
     }
 
     /**
@@ -140,7 +139,7 @@ class BlogController extends Controller
         ];
 
         Post::where('id', $post->id)->update($data);
-        return redirect()->route('member.blogs.index')->with('success','Data berhasil di update');
+        return redirect()->route('member.pages.index')->with('success','Data berhasil di update');
     }
 
     /**
@@ -148,13 +147,13 @@ class BlogController extends Controller
      */
     public function destroy(Post $post)
     {
-        Gate::authorize('delete',$post);
+       
 
         if(isset($post->thumbnail) && file_exists(public_path(getenv('COSTUM__THUMBNAIL_LOCATION'))."/".$post->thumbnail)){
             unlink(public_path(getenv('COSTUM__THUMBNAIL_LOCATION'))."/".$post->thumbnail);
         }
         Post::where('id',$post->id)->where('type', $this->type)->delete();
-        return redirect()->route('member.blogs.index')->with('success','Data berhasil di hapus');
+        return redirect()->route('member.pages.index')->with('success','Data berhasil di hapus');
     }
 
     private function generateSlug($title, $id=null) {

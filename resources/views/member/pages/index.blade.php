@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Pengaturan Blog <a href="{{ route('member.blogs.create') }}" class="bg-blue-400 p-2 rounded-md text-white text-sm">Tambah Tulisan</a>
+            Pengaturan Pages <a href="{{ route('member.pages.create') }}" class="bg-blue-400 p-2 rounded-md text-white text-sm">Tambah Page</a>
         </h2>
     </x-slot>
     <x-slot name="headerRight">
-        <form action="{{ route('member.blogs.index') }}" method="GET">
+        <form action="{{ route('member.pages.index') }}" method="GET">
             <x-text-input id="search" name="search" type="text" class="p-1 m-0 md:w-72 w-80 mt-3 md:mt-0" value="{{ request('search') }}" placeholder='Search'></x-text-input>
             <x-secondary-button class="p-1" type='submit'>Search</x-secondary-button>
         </form>
@@ -38,9 +38,9 @@
                                 <td class="border px-6 py-4 text-center text-gray-500 text-sm hidden lg:table-cell">{{ $value->created_at->isoFormat('dddd, D MMMM Y') }}</td>
                                 <td class="border px-6 py-4 text-center text-sm hidden lg:table-cell">{{ $value->status }}</td>
                                 <td class="border px-6 py-4 text-center">
-                                    <a href='{{ route("member.blogs.edit",["post"=>$value->id]) }}' class="text-blue-600 hover:text-blue-400 px-2">Edit</a>
-                                    <a href="{{ route('blog-detail',['slug'=>$value->slug]) }}" class="text-blue-600 hover:text-blue-400 px-2">lihat</a>
-                                    <form action="{{ route('member.blogs.destroy',['post'=>$value->id]) }}" class="inline" method="POST" onsubmit="return confirm('Yakin?')">
+                                    <a href='{{ route("member.pages.edit",["post"=>$value->id]) }}' class="text-blue-600 hover:text-blue-400 px-2">Edit</a>
+                                    <a href="{{ route('page-detail',['slug'=>$value->slug]) }}" class="text-blue-600 hover:text-blue-400 px-2">lihat</a>
+                                    <form action="{{ route('member.pages.destroy',['post'=>$value->id]) }}" class="inline" method="POST" onsubmit="return confirm('Yakin?')">
                                         @csrf
                                         @method('delete')
                                         <button type='submit' class='text-red-600 hover:text-red-400 px-2'>

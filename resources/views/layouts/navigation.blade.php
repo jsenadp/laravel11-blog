@@ -6,7 +6,8 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
+                        <b>Member {{ getenv('APP_NAME') }}</b>
                     </a>
                 </div>
 
@@ -17,6 +18,12 @@
                     </x-nav-link>
                     <x-nav-link :href="route('member.blogs.index')" :active="request()->routeIs('member.blogs.*')">
                         Blogs
+                    </x-nav-link>
+                    <x-nav-link :href="route('member.pages.index')" :active="request()->routeIs('member.pages.*')">
+                        Pages
+                    </x-nav-link>
+                    <x-nav-link :href="route('member.users.index')" :active="request()->routeIs('member.users.*')">
+                        Users
                     </x-nav-link>
                 </div>
             </div>
@@ -75,6 +82,12 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('member.blogs.index')" :active="request()->routeIs('member.blogs.*')">
                 Blogs
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('member.pages.index')" :active="request()->routeIs('member.pages.*')">
+                Pages
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('member.users.index')" :active="request()->routeIs('member.users.*')">
+                Users
             </x-responsive-nav-link>
         </div>
 
